@@ -1,6 +1,6 @@
 function ConvertHandler() {
 
-  let units = [['gal','l'],['mi','km'],['lbs','kg']];
+  let units = [['gal','L'],['mi','km'],['lbs','kg']];
 
   let regex = /[a-z]+|[^a-z]+/gi;
   
@@ -8,54 +8,68 @@ function ConvertHandler() {
 
    let result = input.match(regex)[0];
 
-    if(isNumber(Number(result)))
+    if(Number(eval(result))){
+      result = eval(result);
     return result;
+      
+    }
 
     else{
+      
+      if(units.includes(result)){
       result = 1;
       return result;
+      }
+      else{
+        return 'invalid number';
+      }
     }
   };
   
   this.getUnit = function(input) {
     let result = input.match(regex)[0];
   
-    if(isNumber(Number(result))){
+    if(Number(eval(result))){
       result = input.match(regex)[1];  
-    return result;
+
+      
+      if(result.toUpperCase() === 'L'){
+        result = result.toUpperCase();
+        return result;
+      }
+      else{
+        result = result.toLowerCase();
+        return result;
+      }
     }
-    return result;
+    return resul;
      
   };
   
   this.getReturnUnit = function(initUnit) {
     let result;
-
-    let iUnit = initUnit.toLowerCase();
-
+    
     for( let i=0 ; i<3 ;i++){
       for( let j=0 ; j<2 ;j++ ){
-        if(iUnit === units[i][j]){
+        if(initUnit === units[i][j]){
           
           if(j === 0){
-            if(i===0){
-              result = units[0][1].toUpperCase();
+              result = units[i][1];
               return result;
             }
-            result = units[i][1];
-            return result;
-
-          }
           else{
             result = units[i][0];
             return result;
           }
+          }
+          }
         }
-      }
-    }
+     return 'invalid unit';
+      };
+    
 
-    return 'invalid';
-  };
+   
+  
 
   this.spellOutUnit = function(unit) {
     let result;
@@ -67,15 +81,15 @@ function ConvertHandler() {
     const galToL = 3.78541;
     const miToKm = 1.60934;
     const lbsToKg = 0.453592;
-    let result;
-    let iUnit = initUnit.toLowerCase();
+    let result=1;
+    
 
     switch(initUnit){
 
       case 'gal':
         result = initNum*galToL;
       break; 
-      case 'l':
+      case 'L':
         result = initNum/galToL;
       break; 
       case 'mi':
@@ -90,14 +104,16 @@ function ConvertHandler() {
       case 'kg':
         result = initNum/lbsToKg;
       break; 
+        
     }
 
+    result = result.toFixed(5);
     return result;
   };
   
   this.getString = function(initNum, initUnit, returnNum, returnUnit) {
     let result;
-    result = '${initNum} ${initUnit} converts to ${returnNum} ${returnUnit}'
+    result = initNum + ' ' + initUnit + ' converts to ' + returnNum + ' ' + returnUnit ;
     
     return result;
   };
