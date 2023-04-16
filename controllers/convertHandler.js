@@ -1,49 +1,96 @@
 function ConvertHandler() {
 
+  function canEval(str){
+  try { eval(str); } catch (e){ return false; }
+  return true;
+}
+
   let units = [['gal','L'],['mi','km'],['lbs','kg']];
 
   let regex = /[a-z]+|[^a-z]+/gi;
+  let r1 = /^[1-9][0-9]*$/;
+  
+  let r2 = /^0\.[0-9]+$|^[1-9][0-9]*\.[0-9]+$/;
+  
+  let r3 = /(^([1-9][0-9]*)|(^0\.[0-9]+|^[1-9][0-9]*\.[0-9]+))\/(([1-9][0-9]*$)|(0\.[0-9]+$|[1-9][0-9]*\.[0-9]+$))/;
   
   this.getNum = function(input) {
 
    let result = input.match(regex)[0];
 
-    if(Number(eval(result))){
-      result = eval(result);
-    return result;
-      
+    if(canEval(result)){
+
+      if(r1.test(result) || r2.test(result) || r3.test(result)){
+        result = eval(result).toFixed(5);
+        return result;
+      }
+      else{
+        result='invalid number'
+        return result;
+      }
     }
 
     else{
-      
-      if(units.includes(result)){
-      result = 1;
+
+      if(result === 'l' || result === 'L'){
+        result = 1;
       return result;
-      }
-      else{
-        return 'invalid number';
+          
+        }
+        else{
+          result = result.toLowerCase();
+        if(units.includes(result)){
+          result = 1;
+      return result;
+        }
+       return 'invalid number'   
+          
+    
+      
       }
     }
-  };
+    };
+  
   
   this.getUnit = function(input) {
     let result = input.match(regex)[0];
   
     if(Number(eval(result))){
-      result = input.match(regex)[1];  
+      if(!input.match(regex)[1]){
+        return 'invalid unit';
+      }
 
-      
-      if(result.toUpperCase() === 'L'){
-        result = result.toUpperCase();
-        return result;
-      }
       else{
-        result = result.toLowerCase();
+        result=input.match(regex)[1];
+
+        if(result === 'l' || result === 'L'){
+        result= result.toUpperCase();
         return result;
+          
+        }
+        else{
+          result = result.toLowerCase();
+        return result;
+          
+        }
       }
+      
     }
-    return resul;
+    else{
+        result=input.match(regex)[0];
+
+        if(result === 'l' || result === 'L'){
+        result= result.toUpperCase();
+        return result;
+          
+        }
+        else{
+          result = result.toLowerCase();
+        return result;
+    }
+    
      
+  }
   };
   
   this.getReturnUnit = function(initUnit) {
@@ -67,16 +114,6 @@ function ConvertHandler() {
      return 'invalid unit';
       };
     
-
-   
-  
-
-  this.spellOutUnit = function(unit) {
-    let result;
-    
-    return result;
-  };
-  
   this.convert = function(initNum, initUnit) {
     const galToL = 3.78541;
     const miToKm = 1.60934;

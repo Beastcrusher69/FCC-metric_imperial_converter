@@ -19,14 +19,32 @@ module.exports = function(app) {
 
     let string = convertHandler.getString(initNum, initUnit, returnNum, returnUnit);
 
+    // res.json({ initNum,initUnit,returnNum,returnUnit,string})
+
     if(returnUnit === 'invalid unit'){
-      res.send(returnUnit);
+
+      if(initNum === 'invalid number'){
+        res.send('invalid number and unit');
+      }
+      else{
+        res.send('invalid unit');
+        
+      }
     }
-    else if(returnUnit === 'invalid unit'){
-      res.send();
+    else{
+
+      if(initNum === 'invalid number'){
+        res.send('invalid number');
+        
+      }
+      else{
+        res.json({ initNum,initUnit,returnNum,returnUnit,string})
+        
+      }
+      
     }
     
-    res.json({ initNum,initUnit,returnNum,returnUnit,string})
+    
 
     
   })
